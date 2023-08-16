@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import classes from './Register.module.css'
 import { useNavigate } from 'react-router-dom';
+import api from '../../api/apiFront'
 
 const Register = () => {
   const navigate = useNavigate();
@@ -8,14 +9,14 @@ const Register = () => {
     username: '',
     password: '',
     email: '',
-    fullName: '',
+    firstname: '',
+    lastname: '',
     birthday: '',
     address: '',
     type: '',
     imageFile: ''
   });
 
-  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setData({
@@ -24,61 +25,92 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-   
+    if(!data.username){alert("Polje za unos korisnickog imena je obavezno"); return;}
+    if(!data.email){alert("Polje za unos emaila je obavezno"); return;}
+    if(!data.password){alert("Polje za unos lozinke je obavezno"); return;}
+    if(!data.address){alert("Polje za unos adrese je obavezno"); return;}
+    if(!data.birthday){alert("Polje za unos datuma rodjenja je obavezno"); return;}
+    if(!data.type){alert("Polje za unos tipa je obavezno"); return;}
+    if(!data.imageFile){alert("Polje za unos fotografije je obavezno"); return;}
+    if(!data.firstname){alert("Polje za unos  imena je obavezno"); return;}
+    if(!data.lastname){alert("Polje za unos prezimena je obavezno"); return;}
+
+    const formData=new FormData();
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("firstName", data.firstname);
+    formData.append("lastName", data.lastname);
+    formData.append("address", data.address);
+    formData.append("birthday", data.birthday);
+    formData.append("type", data.type);
+    formData.append("imageFile", data.imageFile);
+    const res= await api.post('api/Check/register', formData, { headers: { "Content-Type":"multipart/form-data" }})
+       if(res.status===200){
+        localStorage.setItem('token', res.data);
+        navigate('/home');
+       }
+       else
+        alert(res.data);
   };
 
   return (
     <div>
-      <h2 className={classes.heading}>Registration</h2>
+      <h2 className={classes.heading}>Registracija</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label className={classes.label}>Username:</label>
           <input
             type="text"
             name="username"
             value={data.username}
             onChange={handleChange}
             className={classes.input}
+            placeholder='Korisnicko ime'
           />
-          {errors.username && <span className={classes.error}>{errors.username}</span>}
         </div>
         <div>
-          <label className={classes.label}>Password:</label>
           <input
             type="password"
             name="password"
             value={data.password}
             onChange={handleChange}
             className={classes.input}
+            placeholder='Lozinka'
           />
-          {errors.password && <span className={classes.error}>{errors.password}</span>}
         </div>
         <div>
-          <label className={classes.label}>Email:</label>
           <input
             type="email"
             name="email"
             value={data.email}
             onChange={handleChange}
             className={classes.input}
+            placeholder='email'
           />
-          {errors.email && <span className={classes.error}>{errors.email}</span>}
         </div>
         <div>
-          <label className={classes.label}>Full Name:</label>
           <input
             type="text"
-            name="fullName"
-            value={data.fullName}
+            name="firstname"
+            value={data.firstname}
             onChange={handleChange}
             className={classes.input}
+            placeholder='Ime'
           />
-          {errors.fullName && <span className={classes.error}>{errors.fullName}</span>}
         </div>
         <div>
-          <label className={classes.label}>Birthday:</label>
+          <input
+            type="text"
+            name="lastname"
+            value={data.lastname}
+            onChange={handleChange}
+            className={classes.input}
+            placeholder='Prezime'
+          />
+        </div>
+        <div>
           <input
             type="date"
             name="birthday"
@@ -87,32 +119,29 @@ const Register = () => {
             value={data.birthday}
             onChange={handleChange}
             className={classes.input}
+            placeholder='Datum rodjenja'
           />
-          {errors.birthday && <span className={classes.error}>{errors.birthday}</span>}
         </div>
         <div>
-          <label className={classes.label}>Address:</label>
           <textarea
             name="address"
             value={data.address}
             onChange={handleChange}
             className={classes.textarea}
+            placeholder='Adresa'
           />
-          {errors.address && <span className={classes.error}>{errors.address}</span>}
         </div>
         <div>
-          <label className={classes.label}>User Type:</label>
           <select
             name="type"
             value={data.type}
             onChange={handleChange}
             className={classes.select}
           >
-            <option value="">Select a type</option>
-            <option value="1">Seller</option>
-            <option value="2">Buyer</option>
+            <option value="">Izaberi tip</option>
+            <option value="1">Prodavac</option>
+            <option value="2">Kupac</option>
           </select>
-          {errors.type && <span className={classes.error}>{errors.type}</span>}
         </div>
         <div>
           <img
@@ -127,7 +156,7 @@ const Register = () => {
             <input
               type="file"
               name="imageFile"
-              accept="image/jpg"
+              accept="image/*"
               onChange={(e) => {
                 console.log(e);
                 setData({ ...data, imageFile: e.target.files[0] });

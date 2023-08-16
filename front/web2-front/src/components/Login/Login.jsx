@@ -14,16 +14,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if(!loginForm.email)
+    {
+      alert("Polje za unos mejla ne smije biti prazno");
+      return;
+    }
     
-    
+    await context.onLogin(loginForm);
 
     
   };
 
-  const handleGoogleSignIn = async (e) => {
-      
-  }
+  
 
   return (
     <div>
@@ -56,9 +58,7 @@ const Login = () => {
         {"Ako nemate nalog registrujte se ovde "}
         <Link to={"/register"} className={classes.link}>ovde.</Link>
       </p>
-      <div>
-        <GoogleLogin onSuccess={handleGoogleSignIn} onError={e => alert("Nepostojeci email.")}/>
-      </div>
+      
     </div>
   );
 };

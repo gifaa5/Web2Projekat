@@ -172,3 +172,9 @@ C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\obj\Debug\net6
 C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\obj\Debug\net6.0\WebShop.pdb
 C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\obj\Debug\net6.0\WebShop.genruntimeconfig.cache
 C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\obj\Debug\net6.0\ref\WebShop.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\BCrypt.Net.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\nikola\Desktop\Web2ProjekatIgorSuka\back\WebShop\WebShop\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
