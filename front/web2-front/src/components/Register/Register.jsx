@@ -54,7 +54,7 @@ const Register = () => {
        }
        else
         alert(res.data);
-  };
+  };  
 
   return (
     <div>

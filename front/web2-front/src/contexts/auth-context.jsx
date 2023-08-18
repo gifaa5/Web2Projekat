@@ -15,6 +15,7 @@ export const AuthContextProvider = (props) => {
        if(res.status===200){
         setToken(res.data);
         localStorage.setItem('token', res.data);
+        console.log(res.data);
         navigate('/home');
        }
        else
@@ -24,16 +25,20 @@ export const AuthContextProvider = (props) => {
     const logoutHandler = () => {
         localStorage.clear();
         setToken(null);
-        navigate('');
+        navigate('/');
     };
 
     const userType = () => {
-        
+        try {
+            if(!token)
+                return null;
+            const tokenDecoded = jwtDecode(token);
+            return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+        } catch(e) {
+            console.log(e);
+        }
     };
 
-        const inType = (type) => {
-           
-        }
 
     
 
@@ -44,7 +49,6 @@ export const AuthContextProvider = (props) => {
             onLogout: logoutHandler,
             onLogin: loginHandler,
             type: userType,
-            inType: inType,
         }}>
             
             {

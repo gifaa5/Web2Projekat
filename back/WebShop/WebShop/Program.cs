@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 using WebShop.Configuration;
 using WebShop.Interfaces;
 using WebShop.Services;
@@ -13,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<WebShopDBContext>(opt =>
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -54,6 +59,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<DbContext, WebShopDBContext>();
 builder.Services.AddScoped<ICheckService, CheckService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddAutoMapper(typeof(Mapp));
 builder.Services.AddCors(options =>
@@ -98,12 +104,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
+
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseCors();
 
 app.UseAuthorization();
 

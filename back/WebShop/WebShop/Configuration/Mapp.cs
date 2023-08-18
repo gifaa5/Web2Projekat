@@ -10,6 +10,8 @@ namespace WebShop.Configuration
         {
             CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User, LoginDto>().ReverseMap();
+            CreateMap<User, ProfileDto>().ReverseMap();
+            CreateMap<Order, OrderDto>().ReverseMap();
         }
     }
 }
