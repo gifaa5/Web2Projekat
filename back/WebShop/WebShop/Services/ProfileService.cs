@@ -19,6 +19,22 @@ namespace WebShop.Services
             _dBContext = dBContext;
         }
 
+        public async Task AddProduct(AddProductDto addProductDto, int id)
+        {
+            Product product = _mapper.Map<Product>(addProductDto);
+            product.SellerId= id;
+            if (addProductDto.ImageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    addProductDto.ImageFile.CopyTo(ms);
+                    product.Image = ms.ToArray();
+                }
+            }
+            await _dBContext.Products.AddAsync(product);
+            await _dBContext.SaveChangesAsync();
+        }
+
         public async Task<string> EditProfile(int id, ProfileDto profileDto)
         {
             User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -66,6 +82,13 @@ namespace WebShop.Services
             return _mapper.Map<List<OrderDto>>(await _dBContext.Orders.ToListAsync());
         }
 
+        public async Task<List<OrderDto>> GetNewSellersOrders(int id)
+        {
+            User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            List<Order> orders = user.Orders.Where(x=>x.DeliveryTime>DateTime.Now).ToList();
+            return _mapper.Map<List<OrderDto>>(orders);
+        }
+
         public async Task<ProfileDto> GetProfileInfo(int id)
         {
             User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -79,6 +102,12 @@ namespace WebShop.Services
         public async Task<List<SellerDto>> GetSellers()
         {
             return _mapper.Map<List<SellerDto>>(await _dBContext.Users.Where(x => x.Type == UserType.Seller).ToListAsync());
+        }
+
+        public async Task<List<OrderDto>> GetSellersOrders(int id)
+        {
+            User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return _mapper.Map<List<OrderDto>>(user.Products);
         }
 
         public async Task VerifySeller(VerificationDto verificationDto)

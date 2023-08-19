@@ -9,7 +9,7 @@ import Verifications from "../components/admins-components/Verifications/Verific
 import AllOrders from "../components/admins-components/AllOrders/AllOrders";
 import NewOrders from "../components/sellers-components/NewOrders/NewOrders";
 import MyOrders from "../components/sellers-components/MyOrders/MyOrders";
-import Products from "../components/sellers-components/Products/Products";
+import AddProduct from "../components/sellers-components/Products/AddProduct";
 import PreviousOrders from "../components/buyer-components/PreviousOrders/PreviousOrders";
 import NewOrder from "../components/buyer-components/NewOrder/NewOrder";
 
@@ -28,7 +28,7 @@ const Router = () => {
             {/* Seller */}
             <Route path="/new-orders" element={context.token && context.type() === "Seller" ? <NewOrders /> : <Navigate to="/"/>} />
             <Route path="/my-orders" element={context.token && context.type() === "Seller" ? <MyOrders /> : <Navigate to="/"/>} />
-            <Route path="/products" element={context.token && context.type() === "Seller" ? <Products /> : <Navigate to="/"/>} />
+            <Route path="/add-product" element={context.token && context.type() === "Seller" ? <AddProduct /> : <Navigate to="/"/>} />
             <Route path="/new-order" element={context.token && context.type() === "Buyer" ? <NewOrder /> : <Navigate to="/"/>} />
             <Route path="/previous-orders" element={context.token && context.type() === "Buyer" ? <PreviousOrders /> : <Navigate to="/"/>} />
         </Routes>

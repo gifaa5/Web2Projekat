@@ -9,5 +9,8 @@ namespace WebShop.Interfaces
         public Task<List<OrderDto>> GetAllOrders();
         public Task<List<SellerDto>> GetSellers();
         public Task VerifySeller(VerificationDto verificationDto);
+        public Task AddProduct(AddProductDto addProductDt0o, int id);
+        public Task<List<OrderDto>> GetSellersOrders(int id);
+        public Task<List<OrderDto>> GetNewSellersOrders(int id);
     }
 }

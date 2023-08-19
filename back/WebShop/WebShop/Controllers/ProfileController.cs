@@ -61,5 +61,35 @@ namespace WebShop.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpPost("addProduct")]
+        public async Task<IActionResult> AddProduct([FromForm] AddProductDto addProductDto) {
+             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                return BadRequest("Korisnik sa tim Idjem ne postoji");
+
+            await profileService.AddProduct(addProductDto, userId);
+            return Ok();
+        }
+
+
+        [Authorize]
+        [HttpGet("getSellersOrders")]
+        public async Task<IActionResult> GetSellersOrders() {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                return BadRequest("Korisnik sa tim Idjem ne postoji");
+            List<OrderDto> orders = await profileService.GetSellersOrders(userId);
+            return Ok(orders);
+        }
+
+        [Authorize]
+        [HttpGet("getNewSellersOrders")]
+        public async Task<IActionResult> GetNewSellersOrders()
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                return BadRequest("Korisnik sa tim Idjem ne postoji");
+            List<OrderDto> orders = await profileService.GetNewSellersOrders(userId);
+            return Ok(orders);
+        }
+
     }
 }
