@@ -29,7 +29,7 @@ namespace WebShop.Controllers
         }
         [Authorize]
         [HttpPost("editProfile")]
-        public async Task<IActionResult> EditProfile([FromForm]ProfileDto profileDto)
+        public async Task<IActionResult> EditProfile([FromForm] ProfileDto profileDto)
         {
             if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int id))
                 return BadRequest("Korisnik sa tim Id ne postoji");
@@ -50,7 +50,15 @@ namespace WebShop.Controllers
         [HttpGet("getSellers")]
         public async Task<IActionResult> GetSellres() {
 
-            return Ok(profileService.GetSellers());
+            List<SellerDto> sellers = await profileService.GetSellers();
+            return Ok(sellers);
+        }
+
+        [Authorize]
+        [HttpPost("verifySeller")]
+        public async Task<IActionResult> VerifySeller(VerificationDto verificationDto) {
+            await profileService.VerifySeller(verificationDto);
+            return Ok();
         }
 
     }

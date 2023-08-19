@@ -4,12 +4,13 @@ import api from "../../../api/apiFront";
 const Verifications = () => {
   const [selectedStatus, setSelectedStatus] = useState("verifikovani");
   const [sellers, setSellers] = useState([]);
+  const [filteredSellers, setFilteredSellers] = useState([]);
 
   useEffect(() => {
     const fetchSellers = async () => {
       try {
         const response = await api.get("api/Profile/getSellers");
-        setSellers(response.data);
+        setSellers(response.data.$values);
       } catch (error) {
         console.error("Error fetching sellers:", error);
       }
@@ -18,21 +19,55 @@ const Verifications = () => {
     fetchSellers();
   }, []);
 
+  useEffect(() => {
+    filterSellers(selectedStatus);
+  }, [selectedStatus, sellers]);
+
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
   };
 
-  const acceptSeller = (sellerId) => {
-    // Implementacija za prihvatanje prodavca
+  const filterSellers = (status) => {
+    if (status === "verifikovani") {
+      setFilteredSellers(sellers.filter((seller) => seller.status === 2));
+    } else if (status === "neverifikovani") {
+      setFilteredSellers(sellers.filter((seller) => seller.status === 1));
+    }
   };
 
-  const rejectSeller = (sellerId) => {
-    // Implementacija za odbijanje prodavca
+  const acceptSeller = async (sellerId) => {
+    try {
+      await api.post("api/Profile/verifySeller", {
+        id: sellerId,
+        status: 2, // Prihvacen status
+      });
+      setSellers((prevSellers) =>
+        prevSellers.map((seller) =>
+          seller.id === sellerId ? { ...seller, status: 2 } : seller
+        )
+      );
+    } catch (error) {
+      console.error("Error accepting seller:", error);
+    }
+  };
+
+  const rejectSeller = async (sellerId) => {
+    try {
+      await api.post("api/Profile/verifySeller", {
+        id: sellerId,
+        status: 0, // Odbijen status
+      });
+      setSellers((prevSellers) =>
+        prevSellers.filter((seller) => seller.id !== sellerId)
+      );
+    } catch (error) {
+      console.error("Error rejecting seller:", error);
+    }
   };
 
   return (
     <div>
-      <h2>Verifications</h2>
+      <h2 className="heading">Verifications</h2>
       <label>
         Status:
         <select value={selectedStatus} onChange={handleStatusChange}>
@@ -55,32 +90,30 @@ const Verifications = () => {
             </tr>
           </thead>
           <tbody>
-            {sellers.map((seller) => (
-              <tr key={seller.Id}>
-                <td>{seller.Id}</td>
-                <td>{seller.Username}</td>
-                <td>{seller.Email}</td>
-                <td>{seller.Firstname}</td>
-                <td>{seller.Lastname}</td>
-                <td>{new Date(seller.Birthday).toLocaleDateString()}</td>
-                <td>{seller.Address}</td>
+            {filteredSellers.map((seller) => (
+              <tr key={seller.id}>
+                <td>{seller.id}</td>
+                <td>{seller.username}</td>
+                <td>{seller.email}</td>
+                <td>{seller.firstname}</td>
+                <td>{seller.lastname}</td>
+                <td>{new Date(seller.birthday).toLocaleDateString()}</td>
+                <td>{seller.address}</td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
         <div>
-          {sellers.map((seller) =>
-            seller.Status === 1 ? (
-              <div key={seller.Id}>
-                <p>
-                  {seller.Username} - {seller.Email}
-                </p>
-                <button onClick={() => acceptSeller(seller.Id)}>Prihvati</button>
-                <button onClick={() => rejectSeller(seller.Id)}>Odbij</button>
-              </div>
-            ) : null
-          )}
+          {filteredSellers.map((seller) => (
+            <div key={seller.id}>
+              <p>
+                {seller.username} - {seller.email}
+              </p>
+              <button onClick={() => acceptSeller(seller.id)}>Prihvati</button>
+              <button onClick={() => rejectSeller(seller.id)}>Odbij</button>
+            </div>
+          ))}
         </div>
       )}
     </div>

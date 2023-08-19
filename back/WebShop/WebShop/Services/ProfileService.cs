@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Xml;
 using WebShop.Dto;
 using WebShop.Interfaces;
 using WebShop.Models;
@@ -77,7 +78,16 @@ namespace WebShop.Services
 
         public async Task<List<SellerDto>> GetSellers()
         {
-            return _mapper.Map<List<SellerDto>>(await _dBContext.Users.AllAsync(x=>x.Type==UserType.Seller));
+            return _mapper.Map<List<SellerDto>>(await _dBContext.Users.Where(x => x.Type == UserType.Seller).ToListAsync());
+        }
+
+        public async Task VerifySeller(VerificationDto verificationDto)
+        {
+            User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == verificationDto.id);
+            user.Status = verificationDto.status;
+            _dBContext.Users.Update(user);
+            await _dBContext.SaveChangesAsync();
+            
         }
     }
 }

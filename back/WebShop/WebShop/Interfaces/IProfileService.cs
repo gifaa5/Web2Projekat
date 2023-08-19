@@ -8,5 +8,6 @@ namespace WebShop.Interfaces
         public Task<string> EditProfile(int id, ProfileDto profileDto);
         public Task<List<OrderDto>> GetAllOrders();
         public Task<List<SellerDto>> GetSellers();
+        public Task VerifySeller(VerificationDto verificationDto);
     }
 }
