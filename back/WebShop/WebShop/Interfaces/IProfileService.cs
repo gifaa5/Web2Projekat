@@ -12,5 +12,6 @@ namespace WebShop.Interfaces
         public Task AddProduct(AddProductDto addProductDt0o, int id);
         public Task<List<OrderDto>> GetSellersOrders(int id);
         public Task<List<OrderDto>> GetNewSellersOrders(int id);
+        public Task<List<ProductInfoDto>> GetAllProducts();
     }
 }

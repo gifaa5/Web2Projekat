@@ -91,5 +91,10 @@ namespace WebShop.Controllers
             return Ok(orders);
         }
 
+        [Authorize]
+        [HttpGet("getAllProducts")]
+        public async Task<IActionResult> GetAllProducts() {
+            return Ok(await profileService.GetAllProducts());
+        }
     }
 }

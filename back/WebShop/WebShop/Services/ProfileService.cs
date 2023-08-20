@@ -82,10 +82,16 @@ namespace WebShop.Services
             return _mapper.Map<List<OrderDto>>(await _dBContext.Orders.ToListAsync());
         }
 
+        public async Task<List<ProductInfoDto>> GetAllProducts()
+        {
+            List<Product> products = await _dBContext.Products.ToListAsync();
+            return _mapper.Map<List<ProductInfoDto>>(products);
+        }
+
         public async Task<List<OrderDto>> GetNewSellersOrders(int id)
         {
             User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-            List<Order> orders = user.Orders.Where(x=>x.DeliveryTime>DateTime.Now).ToList();
+            List<Order> orders = user.Orders.Where(x=>x.DeliveryTime>DateTime.Now).ToList() ;
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
