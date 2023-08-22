@@ -23,14 +23,37 @@ const NewOrder = () => {
     fetchProducts();
   }, []);
 
-  const createNewOrder = async (orderDetails) => {
+  const createNewOrder = async (orderDetailsArray) => {
     try {
-      // Implementacija za slanje narudžbine na server
-      const response = await api.post('/api/Profile/createNewOrder', orderDetails); // Prilagodite stazu zahteva i format podataka
+      const formData = new FormData();
+      formData.append('deliveryAddress', orderDetailsArray[0].address);
+      formData.append('comment', orderDetailsArray[0].comment);
+      
+      const item = {
+        Name: orderDetailsArray[0].name,
+        Price: orderDetailsArray[0].price,
+        Amount: orderDetailsArray[0].amount
+      };
+      
+      formData.append('items', JSON.stringify([item]));
+    
+      const response = await api.post('/api/Profile/createNewOrder', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       console.log('Order created:', response.data);
     } catch (error) {
       console.error('Error creating new order:', error);
     }
+    
+  };
+
+  const handleOrderSubmit = (orderDetails) => {
+    if (orderDetails) {
+      createNewOrder(orderDetails);
+    }
+    closeItemModal();
   };
 
   const openItemModal = (product) => {
@@ -41,24 +64,16 @@ const NewOrder = () => {
     setSelectedProduct(null);
   };
 
-  const handleOrderSubmit = (orderDetails) => {
-    if (orderDetails) {
-      createNewOrder(orderDetails);
-    }
-    closeItemModal();
-  };
-
   return (
     <div className="new-order">
       <div className="product-list">
         {products.map((product) => (
           <div key={product.id} className="product-card">
-          <img src={`data:image/jpeg;base64,${product.image}`} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>Price: ${product.price}</p>
-          <button onClick={() => openItemModal(product)}>Order</button>
-        </div>
-        
+            <img src={`data:image/jpeg;base64,${product.image}`} alt={product.name} />
+            <h3>{product.name}</h3>
+            <p>Price: ${product.price}</p>
+            <button onClick={() => openItemModal(product)}>Order</button>
+          </div>
         ))}
       </div>
       {selectedProduct && (

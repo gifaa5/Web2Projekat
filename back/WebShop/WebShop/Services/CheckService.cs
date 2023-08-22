@@ -84,6 +84,14 @@ namespace WebShop.Services
                 user.Status = Status.Ceka;
             else
                 user.Status=Status.Prihvacen;
+            if (registerDto.imageFile != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    registerDto.imageFile.CopyTo(ms);
+                    user.Image = ms.ToArray();
+                }
+            }
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));

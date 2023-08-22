@@ -18,6 +18,7 @@ const Register = () => {
   });
 
 
+
   const handleChange = (e) => {
     setData({
       ...data,
@@ -47,13 +48,13 @@ const Register = () => {
     formData.append("birthday", data.birthday);
     formData.append("type", data.type);
     formData.append("imageFile", data.imageFile);
-    const res= await api.post('api/Check/register', formData, { headers: { "Content-Type":"multipart/form-data" }})
-       if(res.status===200){
-        localStorage.setItem('token', res.data);
-        navigate('/home');
-       }
-       else
-        alert(res.data);
+    try {
+      const res = await api.post('api/Check/register', formData, { headers: { "Content-Type":"multipart/form-data" }});
+      localStorage.setItem('token', res.data);
+      navigate('/home');
+    } catch (error) {
+      alert(error.response.data);
+    }
   };  
 
   return (
@@ -139,8 +140,8 @@ const Register = () => {
             className={classes.select}
           >
             <option value="">Izaberi tip</option>
-            <option value="1">Prodavac</option>
-            <option value="2">Kupac</option>
+            <option value="2">Prodavac</option>
+            <option value="1">Kupac</option>
           </select>
         </div>
         <div>
@@ -158,7 +159,6 @@ const Register = () => {
               name="imageFile"
               accept="image/*"
               onChange={(e) => {
-                console.log(e);
                 setData({ ...data, imageFile: e.target.files[0] });
               }}
             />

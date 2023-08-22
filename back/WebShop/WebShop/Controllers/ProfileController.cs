@@ -96,5 +96,26 @@ namespace WebShop.Controllers
         public async Task<IActionResult> GetAllProducts() {
             return Ok(await profileService.GetAllProducts());
         }
+
+        [Authorize]
+        [HttpPost("createNewOrder")]
+        public async Task<IActionResult> CreateNewOrder([FromForm]NewOrderDto newOrderDto)
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                return BadRequest("Korisnik sa tim Idjem ne postoji");
+            string res=await profileService.CreateNewOrder(userId, newOrderDto);
+            return Ok(res);
+        }
+
+
+        [Authorize]
+        [HttpGet("getBuyersOrders")]
+        public async Task<IActionResult> GetBuyersOrders()
+        {
+            if (!int.TryParse(User.Claims.First(c => c.Type == "Id").Value, out int userId))
+                return BadRequest("Korisnik sa tim Idjem ne postoji");
+            
+            return Ok(await profileService.GetBuyersOrders(userId));
+        }
     }
 }

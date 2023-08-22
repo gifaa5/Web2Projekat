@@ -4,8 +4,9 @@ export class EditProfileModel {
       this.password = obj.password;
       this.newPassword = obj.newPassword;
       this.email = obj.email;
-      this.fullName = obj.fullName;
-      this.birthday = obj.birthday;
+      this.firstName = obj.firstName;
+      this.lastName = obj.lastName;
+            this.birthday = obj.birthday;
       this.address = obj.address;
       this.image = obj.image;
       this.imageFile = obj.imageFile;
@@ -18,7 +19,8 @@ export class EditProfileModel {
       this.id = obj.id;
       this.username = obj.username;
       this.email = obj.email;
-      this.fullName = obj.fullName;
+      this.firstName = obj.firstName;
+      this.lastName = obj.lastName;
       this.birthday = obj.birthday;
       this.address = obj.address;
       this.type = obj.type;
@@ -28,7 +30,8 @@ export class EditProfileModel {
 
   export class SellerModel {
     constructor(obj) {
-     this.fullName = obj.fullName;
+     this.firstName = obj.firstName;
+     this.lastName = obj.lastName;
      this.email = obj.email;
    }
  }

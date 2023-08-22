@@ -6,8 +6,9 @@ namespace WebShop.Models
     {
 
         public int Id { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
         public int Amount { get; set; }
         public int OrderId { get; set; }
         public Order? Order { get; set; }

@@ -14,6 +14,7 @@ namespace WebShop.Configuration
             CreateMap<User, SellerDto>().ReverseMap();
 
             CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<Order, NewOrderDto>().ReverseMap();
             
             CreateMap<Product, AddProductDto>().ReverseMap();
             CreateMap<Product, ProductInfoDto>().ReverseMap();

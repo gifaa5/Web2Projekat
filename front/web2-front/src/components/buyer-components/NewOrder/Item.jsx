@@ -8,11 +8,11 @@ const Item = ({ product, onSubmit }) => {
 
   const handleOrderSubmit = (e) => {
     e.preventDefault();
-    if(!quantity || !address || !comment)
-    {
-        alert('Sva polja su obavezna');
-        return;
+    if (!quantity || !address || !comment) {
+      alert('All fields are required.');
+      return;
     }
+
     const orderDetails = {
       name: product.name,
       price: product.price,
@@ -21,7 +21,7 @@ const Item = ({ product, onSubmit }) => {
       comment
     };
 
-    onSubmit(orderDetails);
+    onSubmit([orderDetails]); // Ovde šaljemo niz sa jednim elementom
   };
 
   return (

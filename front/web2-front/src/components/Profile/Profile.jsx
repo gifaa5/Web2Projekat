@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import classes from "./Profile.module.css";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/apiFront";
+import AuthContext from "../../contexts/auth-context";
+
 
 const Profile = () => {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('api/Profile/getProfileInfo');
-        setData({ ...data, ...response.data });
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const navigate = useNavigate();
+  const context=useContext(AuthContext);
   const [data, setData] = useState({
     username: "",
-    password: "",
     email: "",
+    password:"",
     firstname: "",
     lastname: "",
     birthday: "",
@@ -30,13 +19,44 @@ const Profile = () => {
     image: "",
     imageFile: "",
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      
+      try {
+        
+        const response = await api.get('api/Profile/getProfileInfo');
+        const formattedBirthday = formatDateForInput(response.data.birthday);
+        setData({ ...data, ...response.data, birthday: formattedBirthday });
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [data]);
+
+  function formatDateForInput(isoDate) {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+
+  const navigate = useNavigate();
+  
 
   const [newPassword, setNewPassword]=useState("");
+  const [password, setPassword]=useState("");
 
   const convertImage = (img) => {
     return `data:image/jpg;base64,${img}`;
   };
 
+  const handleClick=()=>{
+    alert("Korisnicko ime se ne moze menjati");
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,10 +69,7 @@ const Profile = () => {
       alert("Polje za unos korisnickog imena ne sme ostati prazno");
       return;
     }
-    if(!data.password){
-      alert("Polje za unos lozinke ne sme ostati prazno");
-      return;
-    }
+    
     if(!data.firstname){
       alert("Polje za unos  imena ne sme ostati prazno");
       return;
@@ -75,28 +92,38 @@ const Profile = () => {
       alert("Polje za unos datuma rodjenja ne sme ostati prazno");
       return;
     }
+    
 
-    if(data.password!==newPassword)
-    {
-      alert("Loznike se ne poklapaju");
-      return;
+    if (password !== "") {
+      if (password !== newPassword) {
+        alert("Lozinke se ne poklapaju");
+        return;
+      }
     }
+
+
     const formData=new FormData();
     formData.append("username", data.username);
     formData.append("email", data.email);
-    formData.append("password", data.password);
+    if(!password)
+      formData.append("password", data.password);
+    else
+      formData.append("password", password);
+
     formData.append("firstName", data.firstname);
     formData.append("lastName", data.lastname);
     formData.append("address", data.address);
     formData.append("birthday", data.birthday);
     formData.append("imagefile", data.imageFile);
-    const response = await api.post('api/Profile/editProfile', formData, { headers: { "Content-Type":"multipart/form-data" }});
-    if(response.status===200){
-      alert(response.data);
-      navigate('/profile');
-    }
-    alert(response.data);
+    
 
+    try {
+      const response = await api.post('api/Profile/editProfile', formData, { headers: { "Content-Type":"multipart/form-data" }});
+      console.log(response.data);
+      navigate('/profile');
+    } catch (error) {
+      alert(error.response.data);
+    }
   };
 
   return (
@@ -105,16 +132,17 @@ const Profile = () => {
       <form onSubmit={handleSubmit} className={classes.form}>
         <div>
           <label className={classes.label}>Korisnicko ime:</label>
-          <input type="text" name="username" value={data.username} onChange={handleChange} className={classes.input} />
+          <input type="text" name="username" value={data.username} readOnly onClick={handleClick} className={classes.input} />
         </div>
         <div>
           <label className={classes.label}>Lozinka:</label>
           <input
             type="password"
             name="password"
-            value={data.password}
-            onChange={handleChange}
-            className={classes.input}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value); 
+            }}            className={classes.input}
           />
         </div>
         <div>
@@ -166,6 +194,7 @@ const Profile = () => {
           />
         </div>
         <div>
+          
           <input
             type="file"
             name="imageFile"

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import {useNavigate} from 'react-router-dom'
 import api from '../api/apiFront'
+
+
 const AuthContext = React.createContext();
 
 export const AuthContextProvider = (props) => {
@@ -23,22 +25,25 @@ export const AuthContextProvider = (props) => {
     };
 
     const logoutHandler = () => {
-        localStorage.clear();
         setToken(null);
+        localStorage.clear();
         navigate('/');
     };
 
-    const userType = () => {
+    const userType =  () => {
         try {
-            if(!token)
+            if (!token)
                 return null;
             const tokenDecoded = jwtDecode(token);
+            
             return tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
     };
-
+    
+    
+    
 
     
 

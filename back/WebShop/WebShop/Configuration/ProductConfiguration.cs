@@ -14,6 +14,8 @@ namespace WebShop.Configuration
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(200);
+            builder.HasOne(x => x.Seller).WithMany(x => x.Products).HasForeignKey(x => x.SellerId).OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
