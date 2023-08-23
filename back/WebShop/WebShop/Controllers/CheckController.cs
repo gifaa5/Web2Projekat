@@ -21,6 +21,8 @@ namespace WebShop.Controllers
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             string token = await _service.Login(loginDto);
+            if (token == "Korisnik ne postoji" || token == "Neispravna lozinka" || token == "Vas zahtev je odbijen" || token == "Jos ste na cekanju")
+                return BadRequest(token);
             return Ok(token);
         }
 

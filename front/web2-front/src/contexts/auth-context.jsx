@@ -13,15 +13,16 @@ export const AuthContextProvider = (props) => {
     
 
     const loginHandler = async(loginData) => {
-       const res= await api.post('api/Check/login', loginData)
-       if(res.status===200){
+       try{
+        const res= await api.post('api/Check/login', loginData)
         setToken(res.data);
         localStorage.setItem('token', res.data);
         console.log(res.data);
         navigate('/home');
        }
-       else
-        alert(res.data);
+       catch(error){
+        alert(error.response.data);
+       }
     };
 
     const logoutHandler = () => {

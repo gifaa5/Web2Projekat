@@ -1,4 +1,4 @@
-﻿    using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Xml;
 using WebShop.Dto;
@@ -125,14 +125,8 @@ namespace WebShop.Services
 
         public async Task<List<OrderDto>> GetBuyersOrders(int id)
         {
-            User user=await _dBContext.Users.FirstOrDefaultAsync(x=>x.Id == id);
             List<Order> orders = await _dBContext.Orders.Where(x => x.UserId == id).ToListAsync();
-            IEnumerable<int> ids = user.Products.Select(x => x.Id);
-            if (orders != null)
-                orders = orders.ToList().FindAll(x => x.Items.Any(x=>ids.Contains(x.Id)));
-
-            foreach (Order order in orders)
-                order.Items = order.Items.FindAll(x => ids.Contains(x.Id));
+            
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
@@ -140,6 +134,12 @@ namespace WebShop.Services
         {
             User user = await _dBContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             List<Order> orders = await _dBContext.Orders.Where(x=>x.DeliveryTime>DateTime.Now).ToListAsync();
+            IEnumerable<int> ids = user.Products.Select(x => x.Id);
+            if (orders != null)
+                orders = orders.ToList().FindAll(x => x.Items.Any(x => ids.Contains(x.ProductId)));
+
+            foreach (Order order in orders)
+                order.Items = order.Items.FindAll(x => ids.Contains(x.ProductId));
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
@@ -164,10 +164,10 @@ namespace WebShop.Services
             List<Order> orders = await _dBContext.Orders.ToListAsync();
             IEnumerable<int> ids = user.Products.Select(x => x.Id);
             if (orders != null)
-                orders = orders.ToList().FindAll(x => x.Items.Any(x => ids.Contains(x.Id)));
+                orders = orders.ToList().FindAll(x => x.Items.Any(x => ids.Contains(x.ProductId)));
 
             foreach (Order order in orders)
-                order.Items = order.Items.FindAll(x => ids.Contains(x.Id));
+                order.Items = order.Items.FindAll(x => ids.Contains(x.ProductId));
             return _mapper.Map<List<OrderDto>>(orders);
         }
 

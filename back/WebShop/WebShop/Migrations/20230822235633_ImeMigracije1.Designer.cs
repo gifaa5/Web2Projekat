@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebShop.Settings;
 
@@ -11,9 +12,11 @@ using WebShop.Settings;
 namespace WebShop.Migrations
 {
     [DbContext(typeof(WebShopDBContext))]
-    partial class WebShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230822235633_ImeMigracije1")]
+    partial class ImeMigracije1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

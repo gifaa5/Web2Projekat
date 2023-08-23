@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebShop.Settings;
 
@@ -11,9 +12,11 @@ using WebShop.Settings;
 namespace WebShop.Migrations
 {
     [DbContext(typeof(WebShopDBContext))]
-    partial class WebShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230822234549_ImeMigracije")]
+    partial class ImeMigracije
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +99,7 @@ namespace WebShop.Migrations
                     b.Property<DateTime>("OrderTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 23, 1, 56, 33, 56, DateTimeKind.Local).AddTicks(7813));
+                        .HasDefaultValue(new DateTime(2023, 8, 23, 1, 45, 48, 871, DateTimeKind.Local).AddTicks(1289));
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -112,7 +115,7 @@ namespace WebShop.Migrations
                         {
                             Id = 1,
                             DeliveryAddress = "Adresa 123",
-                            DeliveryTime = new DateTime(2023, 8, 23, 4, 43, 33, 58, DateTimeKind.Local).AddTicks(450),
+                            DeliveryTime = new DateTime(2023, 8, 23, 4, 9, 48, 871, DateTimeKind.Local).AddTicks(5352),
                             IsCanceled = false,
                             OrderPrice = 300.0,
                             OrderTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -157,17 +160,6 @@ namespace WebShop.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 10,
-                            Description = "123",
-                            Name = "Test",
-                            Price = 100.0,
-                            SellerId = 2
-                        });
                 });
 
             modelBuilder.Entity("WebShop.Models.User", b =>
@@ -241,7 +233,7 @@ namespace WebShop.Migrations
                             Email = "admin@gmail.com",
                             Firstname = "Admin Admin",
                             Lastname = "Admin Admin",
-                            Password = "$2a$10$poJPkM2M2Pt9UUz8XzFIVONNYQ9TQJW99Gk6OzWLa1a20MUQj/3nS",
+                            Password = "$2a$10$SA..juCeFpn0FfNNh0RmYu1Mg096mkjokdKgbd9OTOVt50T9R6Cjy",
                             Status = "Odbijen",
                             Type = "Administrator",
                             Username = "admin"
@@ -254,7 +246,7 @@ namespace WebShop.Migrations
                             Email = "gifaa99@gmail.com",
                             Firstname = "Seller Seller",
                             Lastname = "Seller Seller",
-                            Password = "$2a$10$sWTxXJZ9b2lnmHo2olCK/uIkk9oVTRTJS6WB2pYPBEZB45qEUTF3u",
+                            Password = "$2a$10$yTwQlBlALUYTEXFBiJW0D.QVoysA/h.imt8tg/9sD5VxnTBBMJvcW",
                             Status = "Ceka",
                             Type = "Seller",
                             Username = "seller"
@@ -267,7 +259,7 @@ namespace WebShop.Migrations
                             Email = "buyer@gmail.com",
                             Firstname = "Buyer Buyer",
                             Lastname = "Buyer Buyer",
-                            Password = "$2a$10$9gGVn2vLK1m/NYCVet89IuH7BLCtXgekowD0qWsOSxR5qTmOlFX8.",
+                            Password = "$2a$10$1cARKd5fDgxr8NSbJO587.d1wPRcZGH.fI4qGxJTRFDolOHupuPNu",
                             Status = "Odbijen",
                             Type = "Buyer",
                             Username = "buyer"

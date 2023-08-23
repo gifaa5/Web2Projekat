@@ -8,7 +8,7 @@ const Navbar = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    
+    context.onLogout();
   }
 
   return (

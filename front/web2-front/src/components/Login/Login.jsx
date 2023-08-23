@@ -19,7 +19,11 @@ const Login = () => {
       alert("Polje za unos mejla ne smije biti prazno");
       return;
     }
-    
+    if(!loginForm.password)
+    {
+      alert("Polje za unos lozinke ne smije biti prazno");
+      return;
+    }
     await context.onLogin(loginForm);
     
   };

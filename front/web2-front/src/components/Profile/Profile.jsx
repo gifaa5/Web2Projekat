@@ -33,7 +33,7 @@ const Profile = () => {
     };
   
     fetchData();
-  }, [data]);
+  }, []);
 
   function formatDateForInput(isoDate) {
     const date = new Date(isoDate);

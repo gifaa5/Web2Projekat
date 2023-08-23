@@ -15,7 +15,15 @@ namespace WebShop.Configuration
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(200);
             builder.HasOne(x => x.Seller).WithMany(x => x.Products).HasForeignKey(x => x.SellerId).OnDelete(DeleteBehavior.Cascade);
-
+            builder.HasData(new Product
+            {
+                Id = 1,
+                Name = "Test",
+                Price = 100,
+                Amount = 10,
+                Description = "123",
+                SellerId = 2,
+            });
         }
     }
 }
